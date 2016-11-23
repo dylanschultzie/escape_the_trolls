@@ -3,8 +3,8 @@ import random
 from player import Player
 
 direction_key = {
-    'u': (1, 0),
-    'd': (-1, 0),
+    'u': (-1, 0),
+    'd': (1, 0),
     'l': (0, -1),
     'r': (0, 1)
 }
@@ -76,8 +76,13 @@ class Maze():
     def move(self, dir):
         position = self.player.position()
 
-        #new_pos = position + direction_key[dir]
-        tuple(map(operator.add, position, direction_key[dir]))
-        input()
+        new_pos = tuple(map(operator.add, position, direction_key[dir]))
+
+        if '#' not in self.board[new_pos[1]][new_pos[0]]:
+            self.player.set_position(new_pos)
+            self.player.set_direction(dir)
+            self.board[position[1]][position[0]] = ' '
+            self.board[new_pos[1]][new_pos[0]] = self.player.facing()
+
 
 
