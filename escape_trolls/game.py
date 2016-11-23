@@ -1,16 +1,18 @@
-import Maze
+import maze
 
 class Game():
     def __init__(self):
-        self.game = Maze.Maze()
+        self.game = maze.Maze()
         self.game.print_maze()
         self.play()
 
     def play(self):
         self.welcome_screen()
 
-        while not game.is_won():
-            move = get_movement
+        while not self.game.is_won():
+            move = get_movement()
+            self.game.move( move )
+
     def welcome_screen(self):
         print( "Welcome to Escape the Trolls v0.1!" )
 

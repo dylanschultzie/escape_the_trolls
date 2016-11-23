@@ -13,7 +13,7 @@ class Player():
         self.direction = direction['d']
 
     def position(self):
-        return [x_pos, y_pos]
+        return [self.x_pos, self.y_pos]
 
 
         

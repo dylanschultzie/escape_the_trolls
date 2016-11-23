@@ -1,6 +1,13 @@
 import random
 from player import Player
 
+direction_key = {
+    'u': [1, 0],
+    'd': [-1, 0],
+    'l': [0, -1],
+    'r': [0, 1]
+}
+
 map = """#########################################################################
 #   #               #               #           #                   #   #
 #   #   #########   #   #####   #########   #####   #####   #####   #   #
@@ -61,8 +68,15 @@ class Maze():
 
 
     def is_won(self):
-        if player.position() is exit:
+        if self.player.position() is exit:
             return True
         return False
 
-    def move(self, direction):
+    def move(self, dir):
+        x_pos = self.player.x_pos
+        y_pos = self.player.y_pos
+
+        new_pos = [y_pos, x_pos] + direction_key[dir]
+        input()
+
+
