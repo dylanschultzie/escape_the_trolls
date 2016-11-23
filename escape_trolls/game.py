@@ -10,14 +10,14 @@ class Game():
         self.welcome_screen()
 
         while not self.game.is_won():
-            move = get_movement()
+            move = self.get_movement()
             self.game.move( move )
 
     def welcome_screen(self):
         print( "Welcome to Escape the Trolls v0.1!" )
 
     def get_movement(self):
-        movement = ''
+        movement = 'x'
         while movement not in 'udlr':
             movement = input( "Direction movement? (u, d, l, r)")
         return movement

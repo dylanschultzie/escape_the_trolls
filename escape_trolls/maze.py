@@ -1,14 +1,15 @@
+import operator
 import random
 from player import Player
 
 direction_key = {
-    'u': [1, 0],
-    'd': [-1, 0],
-    'l': [0, -1],
-    'r': [0, 1]
+    'u': (1, 0),
+    'd': (-1, 0),
+    'l': (0, -1),
+    'r': (0, 1)
 }
 
-map = """#########################################################################
+maze = """#########################################################################
 #   #               #               #           #                   #   #
 #   #   #########   #   #####   #########   #####   #####   #####   #   #
 #               #       #   #           #           #   #   #       #   #
@@ -40,7 +41,7 @@ class Maze():
         self.find_maze_exit()
 
     def create_maze(self):
-        self.board = [list(line) for line in map.split('\n')]
+        self.board = [list(line) for line in maze.split('\n')]
 
     def print_maze(self):
         for item in self.board:
@@ -73,10 +74,10 @@ class Maze():
         return False
 
     def move(self, dir):
-        x_pos = self.player.x_pos
-        y_pos = self.player.y_pos
+        position = self.player.position()
 
-        new_pos = [y_pos, x_pos] + direction_key[dir]
+        #new_pos = position + direction_key[dir]
+        tuple(map(operator.add, position, direction_key[dir]))
         input()
 
 
