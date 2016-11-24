@@ -78,11 +78,18 @@ class Maze():
 
         new_pos = tuple(map(operator.add, position, direction_key[dir]))
 
-        if '#' not in self.board[new_pos[1]][new_pos[0]]:
-            self.player.set_position(new_pos)
-            self.player.set_direction(dir)
-            self.board[position[1]][position[0]] = ' '
-            self.board[new_pos[1]][new_pos[0]] = self.player.facing()
+        if self.movement_valid(new_pos):
+            if '#' not in self.board[new_pos[0]][new_pos[1]]:
+                self.player.set_position(new_pos)
+                self.player.set_direction(dir)
+                self.board[position[0]][position[1]] = ' '
+                self.board[new_pos[0]][new_pos[1]] = self.player.facing()
+
+    def movement_valid(self, position):
+        if all( i > 0 for i in position):
+            if position[0] < len(self.board) and position[1] < len(self.board[0]):
+                return True
+        return False
 
 
 

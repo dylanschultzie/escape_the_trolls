@@ -1,5 +1,6 @@
 import maze
 import os
+import string
 
 class Game():
     def __init__(self):
@@ -15,12 +16,15 @@ class Game():
             move = self.get_movement()
             self.game.move( move )
 
+        os.system('cls')
+        print('You won!')
+
     def welcome_screen(self):
         print( "Welcome to Escape the Trolls v0.1!" )
         input()
 
     def get_movement(self):
-        movement = 'x'
-        while movement not in 'udlr':
+        movement = None
+        while not movement or movement not in 'udlr':
             movement = input( "Direction movement? (u, d, l, r)")
         return movement
