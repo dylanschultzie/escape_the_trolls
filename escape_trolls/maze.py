@@ -116,11 +116,15 @@ class Maze():
 
         if self.movement_valid((column, row)):
             if unit.position() == self.player.position():
-                if unit.facing() == TROLL:
-                    return True
-               
-                elif unit is not self.player:
-                    return False
+                if unit is self.player:
+                    #if player steps onto a troll, you lose
+                    if unit.position() in [troll.position() for troll in self.trolls]:
+                        return False
+
+                else:
+                    #if troll steps on player, you lose
+                    if unit.position() == self.player.position():
+                        return False
 
             if '#' not in new_board_position:
                 unit.set_position((column, row), dir)

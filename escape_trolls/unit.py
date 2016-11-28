@@ -5,6 +5,9 @@ class Unit( object ):
     def position(self):
         return (self.y_pos, self.x_pos)
 
+    def type(self):
+        raise NotImplementedError("Must implement type method")
+
     def set_position(self, new_position, dir = None):
         self.y_pos, self.x_pos = new_position
 
