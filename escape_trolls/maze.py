@@ -138,10 +138,17 @@ class Maze():
                     new_block_position = self.board[block_new_pos[0]][block_new_pos[1]]
 
                     if '#' not in new_block_position:
-                        unit.set_position((column, row), dir)
                         self.board[position[0]][position[1]] = ' '
-                        self.board[column][row] = unit.facing()
                         self.board[block_new_pos[0]][block_new_pos[1]] = '#'
+
+                        if TROLL in new_block_position:
+                            for alive_troll in self.trolls:
+                                if alive_troll.position() == block_new_pos:
+                                    self.trolls.remove(alive_troll)
+                                    self.board[block_new_pos[0]][block_new_pos[1]] = '%'
+
+                        unit.set_position((column, row), dir)
+                        self.board[column][row] = unit.facing()
 
         return True
 
