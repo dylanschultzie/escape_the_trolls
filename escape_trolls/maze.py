@@ -10,6 +10,15 @@ direction_key = {
     'r': (0, 1)
 }
 
+troll_movement = {
+    0: 'u',
+    1: 'd',
+    2: 'l',
+    3: 'r'
+}
+
+TROLL = 'T'
+
 maze = """#########################################################################
 #   #               #               #           #                   #   #
 #   #   #########   #   #####   #########   #####   #####   #####   #   #
@@ -41,6 +50,8 @@ class Maze():
         self.player = Player()
         self.set_initial_player_position()
         self.find_maze_exit()
+        random.seed()
+
 
     def create_maze(self):
         self.board = [list(line) for line in maze.split('\n')]
@@ -65,8 +76,6 @@ class Maze():
             self.trolls.append(trolls)
 
     def generate_random_position(self):
-        random.seed()
-
         while True:
             column = random.randrange(0, len(self.board[0])-1)
             row = random.randrange(0, len(self.board)-1)
@@ -88,26 +97,54 @@ class Maze():
             return True
         return False
 
-    def move(self, dir):
-        position = self.player.position()
+    def generate_troll_movement(self):
+        dir = random.randrange(0, 4)
+        return troll_movement[dir]
 
-        new_pos = tuple(map(operator.add, position, direction_key[dir]))
+    def move(self, dir = None, unit = None):
+        if unit is None:
+            unit = self.player
 
-        if self.movement_valid(new_pos):
-            if '#' not in self.board[new_pos[0]][new_pos[1]]:
-                self.player.set_position(new_pos)
-                self.player.set_direction(dir)
+        if dir is None:
+            dir = generate_direction()
+
+        position = unit.position()
+
+        column, row = tuple(map(operator.add, position, direction_key[dir]))
+
+        new_board_position = self.board[column][row]
+
+        if self.movement_valid((column, row)):
+            if unit.position() == self.player.position():
+                if unit.facing() == TROLL:
+                    return True
+               
+                elif unit is not self.player:
+                    return False
+
+            if '#' not in new_board_position:
+                unit.set_position((column, row), dir)
                 self.board[position[0]][position[1]] = ' '
-                self.board[new_pos[0]][new_pos[1]] = self.player.facing()
-            else:
-                block_new_pos = tuple(map(operator.add, new_pos, direction_key[dir]))
-                if self.movement_valid(block_new_pos) and '#' not in self.board[block_new_pos[0]][block_new_pos[1]]:
-                    self.player.set_position(new_pos)
-                    self.player.set_direction(dir)
-                    self.board[position[0]][position[1]] = ' '
-                    self.board[new_pos[0]][new_pos[1]] = self.player.facing()
-                    self.board[block_new_pos[0]][block_new_pos[1]] = '#'
+                self.board[column][row] = unit.facing()
 
+            else:
+                block_new_pos = tuple(map(operator.add, (column, row), direction_key[dir]))
+
+                if self.movement_valid(block_new_pos):
+                    new_block_position = self.board[block_new_pos[0]][block_new_pos[1]]
+
+                    if '#' not in new_block_position:
+                        unit.set_position((column, row), dir)
+                        self.board[position[0]][position[1]] = ' '
+                        self.board[column][row] = unit.facing()
+                        self.board[block_new_pos[0]][block_new_pos[1]] = '#'
+
+        return True
+
+    def trolls_move(self):
+        for troll in self.trolls:
+            dir = self.generate_troll_movement()
+            self.move( dir, unit=troll )
 
     def movement_valid(self, position):
         if all( i > 0 for i in position):

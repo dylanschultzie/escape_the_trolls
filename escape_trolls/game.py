@@ -14,15 +14,25 @@ class Game():
         self.welcome_screen()
         self.get_difficulty()
         self.game.set_initial_troll_position(self.difficulty)
+        safe = True
+        game_won = False
 
-        while not self.game.is_won():
+        while not game_won and safe:
             os.system('cls')
             self.game.print_maze()
             move = self.get_movement()
-            self.game.move( move )
+            safe = self.game.move( dir = move )
+            self.game.trolls_move()
+
+            if not game_won: 
+                game_won = self.game.is_won()
 
         os.system('cls')
-        print('You won!')
+
+        if game_won is True:
+            print('You won!')
+        elif safe is False:
+            print('The trolls got you. Bummer.')
 
     def welcome_screen(self):
         print( "Welcome to Escape the Trolls v0.2!" )
