@@ -64,12 +64,12 @@ class Maze():
         y_pos = 0
         for row in self.board:
             if 'X' in row:
-                self.exit = [row.index('X'), y_pos]
+                self.exit = (y_pos, row.index('X'))
             y_pos += 1
 
 
     def is_won(self):
-        if self.player.position() is exit:
+        if self.player.position() == self.exit:
             return True
         return False
 
@@ -84,6 +84,15 @@ class Maze():
                 self.player.set_direction(dir)
                 self.board[position[0]][position[1]] = ' '
                 self.board[new_pos[0]][new_pos[1]] = self.player.facing()
+            else:
+                block_new_pos = tuple(map(operator.add, new_pos, direction_key[dir]))
+                if self.movement_valid(block_new_pos) and '#' not in self.board[block_new_pos[0]][block_new_pos[1]]:
+                    self.player.set_position(new_pos)
+                    self.player.set_direction(dir)
+                    self.board[position[0]][position[1]] = ' '
+                    self.board[new_pos[0]][new_pos[1]] = self.player.facing()
+                    self.board[block_new_pos[0]][block_new_pos[1]] = '#'
+
 
     def movement_valid(self, position):
         if all( i > 0 for i in position):
