@@ -1,6 +1,7 @@
 import operator
 import random
 from player import Player
+from troll import Troll
 
 direction_key = {
     'u': (-1, 0),
@@ -36,6 +37,7 @@ maze = """######################################################################
 class Maze():
     def __init__(self):
         self.create_maze()
+        self.trolls = list()
         self.player = Player()
         self.set_initial_player_position()
         self.find_maze_exit()
@@ -48,17 +50,30 @@ class Maze():
             print( ''.join(item)  )
 
     def set_initial_player_position(self):
+        row, column = self.generate_random_position()
+        self.player.y_pos = row
+        self.player.x_pos = column
+        self.board[row][column] = self.player.direction
+
+    def set_initial_troll_position(self, difficulty):
+        for troll in range(difficulty):
+            trolls = Troll()
+            row, column = self.generate_random_position()
+            trolls.y_pos = row
+            trolls.x_pos = column
+            self.board[row][column] = 'T'
+            self.trolls.append(trolls)
+
+    def generate_random_position(self):
         random.seed()
-        player_position = False
-        while not player_position:
+
+        while True:
             column = random.randrange(0, len(self.board[0])-1)
             row = random.randrange(0, len(self.board)-1)
 
             if self.board[row][column] == ' ':
-                self.board[row][column] = self.player.direction
-                self.player.x_pos = column
-                self.player.y_pos = row
-                player_position = True
+                return (row, column)
+
 
     def find_maze_exit(self):
         y_pos = 0

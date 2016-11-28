@@ -1,4 +1,6 @@
+from unit import Unit
 
-class Troll():
+class Troll( Unit ):
     def __init__(self):
-        exit()
+        self.x_pos = 0
+        self.y_pos = 0
