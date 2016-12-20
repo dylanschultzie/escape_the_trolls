@@ -1,2 +1,5 @@
 escape_trolls/__pycache__/*
 .vs/escape_trolls/v14/.suo
+*.suo
+escape_trolls/escape_trolls.pyproj
+*.pyc
