@@ -32,7 +32,7 @@ class Game():
         if game_won is True:
             print('You won!')
         elif safe is False:
-            print('The trolls got you. Bummer.')
+            print('The trolls got you.')
 
     def welcome_screen(self):
         print( "Welcome to Escape the Trolls v0.2!" )
