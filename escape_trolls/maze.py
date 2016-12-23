@@ -17,9 +17,13 @@ troll_movement = {
     3: 'r'
 }
 
+FALLEN_WALL = '%'
+WALL = '#'
+EXIT = 'X'
+HALL = ' '
 TROLL = 'T'
 
-maze = """#########################################################################
+MAZE = """#########################################################################
 #   #               #               #           #                   #   #
 #   #   #########   #   #####   #########   #####   #####   #####   #   #
 #               #       #   #           #           #   #   #       #   #
@@ -52,9 +56,8 @@ class Maze():
         self.find_maze_exit()
         random.seed()
 
-
     def create_maze(self):
-        self.board = [list(line) for line in maze.split('\n')]
+        self.board = [list(line) for line in MAZE.split('\n')]
 
     def print_maze(self):
         for item in self.board:
@@ -72,7 +75,7 @@ class Maze():
             row, column = self.generate_random_position()
             trolls.y_pos = row
             trolls.x_pos = column
-            self.board[row][column] = 'T'
+            self.board[row][column] = TROLL
             self.trolls.append(trolls)
 
     def generate_random_position(self):
@@ -80,15 +83,15 @@ class Maze():
             column = random.randrange(0, len(self.board[0])-1)
             row = random.randrange(0, len(self.board)-1)
 
-            if self.board[row][column] == ' ':
+            if self.board[row][column] == HALL:
                 return (row, column)
 
 
     def find_maze_exit(self):
         y_pos = 0
         for row in self.board:
-            if 'X' in row:
-                self.exit = (y_pos, row.index('X'))
+            if EXIT in row:
+                self.exit = (y_pos, row.index(EXIT))
             y_pos += 1
 
 
@@ -126,9 +129,9 @@ class Maze():
                     if unit.position() == self.player.position():
                         return False
 
-            if '#' not in new_board_position:
+            if WALL not in new_board_position:
                 unit.set_position((column, row), dir)
-                self.board[position[0]][position[1]] = ' '
+                self.board[position[0]][position[1]] = HALL
                 self.board[column][row] = unit.facing()
 
             else:
@@ -137,15 +140,15 @@ class Maze():
                 if self.movement_valid(block_new_pos):
                     new_block_position = self.board[block_new_pos[0]][block_new_pos[1]]
 
-                    if '#' not in new_block_position:
-                        self.board[position[0]][position[1]] = ' '
-                        self.board[block_new_pos[0]][block_new_pos[1]] = '#'
+                    if WALL not in new_block_position:
+                        self.board[position[0]][position[1]] = HALL
+                        self.board[block_new_pos[0]][block_new_pos[1]] = WALL
 
                         if TROLL in new_block_position:
                             for alive_troll in self.trolls:
                                 if alive_troll.position() == block_new_pos:
                                     self.trolls.remove(alive_troll)
-                                    self.board[block_new_pos[0]][block_new_pos[1]] = '%'
+                                    self.board[block_new_pos[0]][block_new_pos[1]] = FALLEN_WALL
 
                         unit.set_position((column, row), dir)
                         self.board[column][row] = unit.facing()
